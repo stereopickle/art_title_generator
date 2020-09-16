@@ -1,3 +1,7 @@
 
 *.jpg
 .ipynb_checkpoints/001.Data_Collection-checkpoint.ipynb
+*.pkl
+*.csv
+.ipynb_checkpoints/010.Data_Cleaning-checkpoint.ipynb
+.ipynb_checkpoints/002.Data_Collection_MoMA-checkpoint.ipynb
