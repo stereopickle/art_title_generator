@@ -8,3 +8,7 @@
 *.txt
 *.h5
 *.json
+MODEL/
+DATA/
+IMAGES/
+PKL/
