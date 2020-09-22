@@ -1,6 +1,6 @@
 # Art Title Generator
 
-The goal of this project is to generate a text caption based on the artwork image.  
+The goal of this project is to develop a natural language generator (NLG) model to generate a text caption from an artwork image.  
 
 ## Context
 1. Art Classification   
