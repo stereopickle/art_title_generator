@@ -42,10 +42,13 @@ Art descriptions contained total of 2893 unique words.
 
 ## Example Data
 Both Flickr and art datasets included images with large variability. 
-![example_flickr](/PNG/example_flickr.png). 
+
+![example_flickr](/PNG/example_flickr.png)
+
 Examples of Flickr image dataset
 
-![example art](/PNG/example_art.png).  
+![example art](/PNG/example_art.png)  
+
 Examples of art dataset
 
 Flickr dataset contained 4-5 human written descriptions per image. For example, one image might be described as...
