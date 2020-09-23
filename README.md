@@ -32,20 +32,20 @@ Our final data included
 ## Preprocessing (NLP)
 Standard preprocessing was done to both art titles and object captions, including turning them into lowercase, removing special characters and digits (or changing them to syntactically meaningful words). Dimensions of art title tokens were further reduced by consodliating words with at least .8 cosine similarity using [Spacy](https://spacy.io/usage/vectors-similarity). Flickr image had a total of 7451 unique vocabularies.  
 
-![flickr word frequencies](/PNG/top_20_flickr.png)
+![flickr word frequencies](/PNG/top_20_flickr.png). 
 
 Art descriptions contained total of 2893 unique words. 
 
-![art word frequenceis](/PNG/top_20_art.png) 
+![art word frequenceis](/PNG/top_20_art.png)  
 
 *Many artworks were 'untitled' (some accompanied by other texts) for future, we may consider eliminating these or getting description for untitled images as well.*
 
 ## Example Data
 Both Flickr and art datasets included images with large variability. 
-![example_flickr](/PNG/example_flickr.png)
+![example_flickr](/PNG/example_flickr.png). 
 Examples of Flickr image dataset
 
-![example art](/PNG/example_art.png). 
+![example art](/PNG/example_art.png).  
 Examples of art dataset
 
 Flickr dataset contained 4-5 human written descriptions per image. For example, one image might be described as...
