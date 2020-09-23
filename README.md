@@ -30,15 +30,9 @@ Our final data included
 3,067 images of paintings (post 1990) from museum APIs with their titles
 
 ## Preprocessing (NLP)
-Standard preprocessing was done to both art titles and object captions, including turning them into lowercase, removing special characters and digits (or changing them to syntactically meaningful words). Dimensions of art title tokens were further reduced by consodliating words with at least .8 cosine similarity using [Spacy](https://spacy.io/usage/vectors-similarity). Flickr image had a total of 7451 unique vocabularies.  
+Standard preprocessing was done to both art titles and object captions, including turning them into lowercase, removing special characters and digits (or changing them to syntactically meaningful words). Dimensions of art title tokens were further reduced by consodliating words with at least .8 cosine similarity using [Spacy](https://spacy.io/usage/vectors-similarity). There were total 9,161 unique vocabularies (7,451 unique words in Flickr set, 2,893 unique words in art set).  
 
-![flickr word frequencies](/PNG/top_20_flickr.png). 
-
-Art descriptions contained total of 2893 unique words. 
-
-![art word frequenceis](/PNG/top_20_art.png)  
-
-*Many artworks were 'untitled' (some accompanied by other texts) for future, we may consider eliminating these or getting description for untitled images as well.*
+![total word frequencies](/PNG/top_20_total.png)
 
 ## Example Data
 Both Flickr and art datasets included images with large variability. 
@@ -69,10 +63,19 @@ Some of the example titles are as below.
 The BLEU (Bilingual Evaluation Understudy) score was used to evaluate the quality of predicted sentence compared to the references. BLEU evaluates how many n-grams in predicted sentence matches the references. 
 
 ## Model
-The basic approach involves two parts: feature extraction using a pre-trained network then sequence prediction for text descriptions using LSTM. 
+The basic approach involves two parts: feature extraction using a pre-trained network (NASNetLarge) then sequence prediction for text descriptions using LSTM. 
+Final model architecture: 
+
+![architecture](/PNG/iter6_arch.png)
+
+
+| Model | Unigram BLEU | Bigram BLEU | 3-Gram BLEU | 4-Gram BLEU |
+| --- | --- | --- | --- | --- |
+| Baseline | 0.32 | 0.15 | 0.09 | 0.03 |
+| Final Model | 0.47 | 0.27 | 0.18 | 0.08 | 
 
 ## Example Performance
-
+Compared to the baseline model with the minimum structure, the final model showed at least 47% increase in BLEU scores in 1 to 4 n-gram matches. Detailed look at the individual predictions showed that the model did good job in creating a syntactically accurate sentences for Flickr images, even though it often failed in referring to the word with correct semantics. On the other hand, its performance on describing art was still weak with many instances of incomplete sentences that failed to follow the correct syntax. Even though it did provide feasible descriptions for some of the items, a deeper training is necessary.
 
 ## Limitations & Future Directions
 Essentially BLEU score assumes that the text references contain all the essence of that image. This is a feasible case for our Flickr data, which has 4-5 descriptions per image, but not the artwork data with only a title per image. At the current stage, the model is evaluated based on how well it classifies the real-life images then used to generate art title. It does not evaluate how accurately (or human-like, since art description is subjective) model describes art. To solve this problem, in the future, it will be worthwhile to collect numbers of human generated art descriptions to evaluate how model's description compares to human's. 
