@@ -15,12 +15,12 @@ The goal of this project is to develop a natural language generator (NLG) model 
 For this project, I create deep learning models to generate captioning for paintings. I explore this with the assumption that art interpretation is an extension of ability to describe any visual scene. Therefore, I built the models on top of a simple real-life image captioning model and incorporated art data and extended the complexity of models. The basis of the image captioning model is an adaptation of outlines by Jason Brownlee PhD at [Machine Learning Mastery](https://machinelearningmastery.com/develop-a-deep-learning-caption-generation-model-in-python/). 
 
 ## Repo Structure 
-`001.Data_Collection_Harvard.ipynb` contains code to collect data and to download images from Harvard Museum API.  
-`002.Data_Collection_MoMA.ipynb` same as above from MoMA.   
-`003.Data_Collection_RISD.ipynb` same as above from RISD Museum API. 
-`010.Data_Cleaning.ipynb` contains code to merge, clean and preprocess data. 
-`020.EDA.ipynb` contains the process of data visualizations. 
-`030.Model_1.ipynb` contains the full modeling process. 
+`001.Data_Collection_Harvard.ipynb` contains code to collect data and to download images from Harvard Museum API.   
+`002.Data_Collection_MoMA.ipynb` same as above from MoMA.    
+`003.Data_Collection_RISD.ipynb` same as above from RISD Museum API.  
+`010.Data_Cleaning.ipynb` contains code to merge, clean and preprocess data.  
+`020.EDA.ipynb` contains the process of data visualizations.  
+`030.Model_1.ipynb` contains the full modeling process.  
 
 ## Data
 There are 2 large category of data used in this project. First is the real-life photo images with caption from Flickr provided by [Jason Brownlee PhD](https://github.com/jbrownlee/Datasets). 
