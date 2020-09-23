@@ -68,7 +68,7 @@ Some of the example titles are as below.
 ## Evaluation Metrics
 The BLEU (Bilingual Evaluation Understudy) score was used to evaluate the quality of predicted sentence compared to the references. BLEU evaluates how many n-grams in predicted sentence matches the references. 
 
-## Model
+## Model Performance
 The basic approach involves two parts: feature extraction using a pre-trained network (NASNetLarge) then sequence prediction for text descriptions using LSTM. 
 Final model architecture: 
 
@@ -80,7 +80,6 @@ Final model architecture:
 | Baseline | 0.32 | 0.15 | 0.09 | 0.03 |
 | Final Model | 0.47 | 0.27 | 0.18 | 0.08 | 
 
-## Example Performance
 Compared to the baseline model with the minimum structure, the final model showed at least 47% increase in BLEU scores in 1 to 4 n-gram matches. Detailed look at the individual predictions showed that the model did good job in creating a syntactically accurate sentences for Flickr images, even though it often failed in referring to the word with correct semantics. On the other hand, its performance on describing art was still weak with many instances of incomplete sentences that failed to follow the correct syntax. Even though it did provide feasible descriptions for some of the items, a deeper training is necessary.
 
 ## Future Directions
