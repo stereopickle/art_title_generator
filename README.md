@@ -14,7 +14,13 @@ The goal of this project is to develop a natural language generator (NLG) model 
 ## Overview
 For this project, I create deep learning models to generate captioning for paintings. I explore this with the assumption that art interpretation is an extension of ability to describe any visual scene. Therefore, I built the models on top of a simple real-life image captioning model and incorporated art data and extended the complexity of models. The basis of the image captioning model is an adaptation of outlines by Jason Brownlee PhD at [Machine Learning Mastery](https://machinelearningmastery.com/develop-a-deep-learning-caption-generation-model-in-python/). 
 
-## Repo Structure
+## Repo Structure 
+`001.Data_Collection_Harvard.ipynb` contains code to collect data and to download images from Harvard Museum API.   
+`002.Data_Collection_MoMA.ipynb` same as above from MoMA.    
+`003.Data_Collection_RISD.ipynb` same as above from RISD Museum API.  
+`010.Data_Cleaning.ipynb` contains code to merge, clean and preprocess data.  
+`020.EDA.ipynb` contains the process of data visualizations.  
+`030.Model_1.ipynb` contains the full modeling process.  
 
 ## Data
 There are 2 large category of data used in this project. First is the real-life photo images with caption from Flickr provided by [Jason Brownlee PhD](https://github.com/jbrownlee/Datasets). 
@@ -77,5 +83,10 @@ Final model architecture:
 ## Example Performance
 Compared to the baseline model with the minimum structure, the final model showed at least 47% increase in BLEU scores in 1 to 4 n-gram matches. Detailed look at the individual predictions showed that the model did good job in creating a syntactically accurate sentences for Flickr images, even though it often failed in referring to the word with correct semantics. On the other hand, its performance on describing art was still weak with many instances of incomplete sentences that failed to follow the correct syntax. Even though it did provide feasible descriptions for some of the items, a deeper training is necessary.
 
-## Limitations & Future Directions
-Essentially BLEU score assumes that the text references contain all the essence of that image. This is a feasible case for our Flickr data, which has 4-5 descriptions per image, but not the artwork data with only a title per image. At the current stage, the model is evaluated based on how well it classifies the real-life images then used to generate art title. It does not evaluate how accurately (or human-like, since art description is subjective) model describes art. To solve this problem, in the future, it will be worthwhile to collect numbers of human generated art descriptions to evaluate how model's description compares to human's. 
+## Future Directions
+Essentially BLEU score assumes that the text references contain all the essence of that image. This is a feasible case for our Flickr data, which has 4-5 descriptions per image, but not the artwork data with only a title per image. At the current stage, the model is evaluated based on how well it classifies the real-life images then used to generate art title. It does not directly evaluate how accurately (or human-like, since art description is subjective) model describes art. To solve this problem, it will be worthwhile to collect numbers of human generated art descriptions to evaluate how model's description compares to human's. Also employing another evaluation metrics that expand beyond the exact matching of the words (e.g. weighted by semantic similarity) will be helpful.
+
+Additionally our model showed that even when it can pick up on the syntactical rules, it often fails in details of semantics. Hypothetically, using a pre-trained word embedding model to assign weights to the LSTM embedding input might aid the model in learning these semantic differences.
+
+## Presentation
+You may find the presentation link about this project [HERE](https://docs.google.com/presentation/d/1OgoYJSFXJ-4wcSDYwGY5PlcGuHndM6AAqr6BNuTGY3A/edit?usp=sharing).
