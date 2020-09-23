@@ -88,3 +88,5 @@ Essentially BLEU score assumes that the text references contain all the essence 
 
 Additionally our model showed that even when it can pick up on the syntactical rules, it often fails in details of semantics. Hypothetically, using a pre-trained word embedding model to assign weights to the LSTM embedding input might aid the model in learning these semantic differences.
 
+## Presentation
+You may find the presentation link to this project [HERE](https://docs.google.com/presentation/d/1OgoYJSFXJ-4wcSDYwGY5PlcGuHndM6AAqr6BNuTGY3A/edit?usp=sharing).
