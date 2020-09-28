@@ -16,7 +16,6 @@ from nltk.translate.bleu_score import corpus_bleu
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 plt.style.use('fivethirtyeight')
-%matplotlib inline
 
 
 def plot_performance(hist):
@@ -74,7 +73,7 @@ class descriptor:
     Input features, tokenizer, processor, model, img_dir
     Return a descriptor object
     '''
-    def __init__(self, features, tokenizer, processor, model, img_dir = flicker_img_dir):
+    def __init__(self, features, tokenizer, processor, model, img_dir):
         self.features = features
         self.tokenizer = tokenizer
         self.processor = processor

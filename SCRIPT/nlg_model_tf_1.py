@@ -22,20 +22,19 @@ from keras.layers import Dense, Dropout, Embedding, Input, LSTM, add
 from keras.optimizers import Adam
 from keras.utils import multi_gpu_model
 
-
+from sequence_generator import *
+from evaluation_tools import *
 
 if __name__ == '__main__':
         
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--epochs', type=int, default=2)
     parser.add_argument('--learning-rate', type=float, default=0.01)
     parser.add_argument('--batch-size', type=int, default=128)
     parser.add_argument('--gpu-count', type=int, default=0)
     parser.add_argument('--model-dir', type=str, default='/tmp')
-    parser.add_argument('--photos-dir', type=str, default='data')
-    parser.add_argument('--img-dir', type=str, default='data')
-    parser.add_argument('--pkl-dir', type=str, default='data')
+    parser.add_argument('--pkl-dir', type=str, default='PKL')
 
     args, _ = parser.parse_known_args()
     
@@ -44,10 +43,9 @@ if __name__ == '__main__':
     batch_size = args.batch_size
     gpu_count  = args.gpu_count
     model_dir  = args.model_dir
-    img_dir    = args.img_dir
     pkl_dir    = args.pkl_dir
     
-    desc_path        = os.path.join(pkl_dir, 'full_descriptions.pkl')
+    desc_path        = os.path.join(pkl_dir, 'condensed_descriptions.pkl')
     feat_path        = os.path.join(pkl_dir, 'full_features.pkl')
     train_list_path  = os.path.join(pkl_dir, 'train_list_full.pkl')
     val_list_path    = os.path.join(pkl_dir, 'val_list_full.pkl')
@@ -75,6 +73,7 @@ if __name__ == '__main__':
         
     # generate inputs and outputs
     processor = sequence_generator(descriptions, features)
+
     train_X1, train_X2, train_Y = processor.train_generator(train_list_full)
     val_X1, val_X2, val_Y = processor.validation_generator(val_list_full)
     
@@ -118,12 +117,7 @@ if __name__ == '__main__':
               )
     
     plot_performance(history)
-    get_bleu(img_inds, feature_dict, tokenizer, max_length, model, text_ref_dict):
-
     
-    score = model.evaluate(x_val, y_val, verbose=0)
-    print('Validation loss    :', score[0])
-    print('Validation accuracy:', score[1])
     
     # save Keras model for Tensorflow Serving
     sess = K.get_session()

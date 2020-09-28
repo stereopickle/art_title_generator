@@ -9,6 +9,8 @@ This script contains code for sequence generator
 
 import numpy as np
 from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.utils import to_categorical
 
 
 def get_keys(dict_):
@@ -112,6 +114,7 @@ class sequence_generator:
     
         Y = to_categorical(Y, self.num_vocab)
         X1 = get_features(self.features, X1)
+        
         return np.array(X1), np.array(X2), np.array(Y)
 
     def validation_generator(self, val_list):
