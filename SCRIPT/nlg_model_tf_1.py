@@ -162,7 +162,6 @@ def _parse_args():
     parser.add_argument('--learning_rate', type=float, default=0.01)
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--gpu_count', type=int, default=os.environ['SM_NUM_GPUS'])
-    #parser.add_argument('--model_dir', type=str, default=os.environ['SM_MODEL_DIR'])
     parser.add_argument('--train', type=str, default=os.environ.get('SM_CHANNEL_TRAINING'))
     parser.add_argument('--hosts', type=list, default=json.loads(os.environ.get('SM_HOSTS')))
     parser.add_argument('--current-host', type=str, default=os.environ.get('SM_CURRENT_HOST'))
@@ -245,7 +244,7 @@ if __name__ == '__main__':
     model.compile(loss = 'categorical_crossentropy', 
              optimizer = Adam(lr=lr))   
     
-    history = model.fit([train_X1, train_X2], train_Y, 
+    model.fit([train_X1, train_X2], train_Y, 
               batch_size = batch_size,
               epochs=epochs, 
               validation_data = ([val_X1, val_X2], val_Y),
@@ -253,7 +252,7 @@ if __name__ == '__main__':
               )
     
     
-    
     # save Keras model for Tensorflow Serving
     if args.current_host == args.hosts[0]:
-        model.save(os.path.join(args.sm_model_dir, '001'))
+        #model.save(os.path.join(args.sm_model_dir, '001'))
+        tf.saved_model.save(model, os.path.join(args.sm_model_dir, '001'))

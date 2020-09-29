@@ -17,6 +17,18 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 plt.style.use('fivethirtyeight')
 
+def get_features(features_dict, img_ind):
+    ''' 
+    Helper to return feature values 
+    given feature dictionary and index
+    '''
+    if isinstance(img_ind, list):
+        return [features_dict[x][0] for x in img_ind]
+    elif isinstance(img_ind, str):
+        return features_dict[img_ind][0]
+    else:
+        print('img_ind must be a list or string type')
+        return None
 
 def plot_performance(hist):
     ''' 
@@ -43,6 +55,9 @@ def ind2word(ind, tokenizer):
     return tokenizer.index_word[ind]
 
 
+def get_inputs(img_feats, current_seq):
+            val_channel = sagemaker.session.s3_input(pkl_dir)
+
 
 def caption_generator(img_ind, features, tokenizer, max_length, model):
     ''' 
@@ -52,7 +67,7 @@ def caption_generator(img_ind, features, tokenizer, max_length, model):
     Output: a caption
     '''
     
-    img_feats = get_features(feature_dict, img_ind)
+    img_feats = get_features(features, img_ind)
     img_feats = np.expand_dims(img_feats, axis = 0)
     current_int = tokenizer.texts_to_sequences(['seqini'])
     fin_int = tokenizer.texts_to_sequences(['seqfin'])[0]
@@ -60,7 +75,9 @@ def caption_generator(img_ind, features, tokenizer, max_length, model):
     # iterate each sequence and predict the next word
     for i in range(max_length):
         current_seq = pad_sequences(current_int, maxlen = max_length)
-        next_int = np.argmax(model.predict([img_feats, current_seq])['predictions'])
+        predictions = model.predict([img_feats, current_seq])
+        print(predictions)
+        next_int = np.argmax()
         if next_int != fin_int:
             current_int = [current_int[0] + [next_int]]
         else: break
