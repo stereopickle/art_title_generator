@@ -13,9 +13,10 @@ https://aws.amazon.com/blogs/machine-learning/train-and-deploy-keras-models-with
 import argparse, os
 import numpy as np
 import pickle
+import json
 
 import tensorflow as tf
-from tensorflow.keras import backend as K
+from tensorflow.compat.v1.keras import backend as K
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Dropout, Embedding, Input, LSTM, add
 from tensorflow.keras.optimizers import Adam
@@ -23,6 +24,7 @@ from tensorflow.keras.utils import multi_gpu_model, to_categorical
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+    
 def get_keys(dict_):
     ''' 
     Helper to return a list of keys 
@@ -150,30 +152,36 @@ class sequence_generator:
     def get_tokenizer(self):
         return self.tokenizer
 
+
+def _parse_args():
+   
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_dir', type=str)
+    parser.add_argument('--sm-model-dir', type=str, default=os.environ.get('SM_MODEL_DIR'))
+    parser.add_argument('--epochs', type=int, default=2)
+    parser.add_argument('--learning_rate', type=float, default=0.01)
+    parser.add_argument('--batch_size', type=int, default=128)
+    parser.add_argument('--gpu_count', type=int, default=os.environ['SM_NUM_GPUS'])
+    #parser.add_argument('--model_dir', type=str, default=os.environ['SM_MODEL_DIR'])
+    parser.add_argument('--train', type=str, default=os.environ.get('SM_CHANNEL_TRAINING'))
+    parser.add_argument('--hosts', type=list, default=json.loads(os.environ.get('SM_HOSTS')))
+    parser.add_argument('--current-host', type=str, default=os.environ.get('SM_CURRENT_HOST'))
     
+    return parser.parse_known_args()
 
 if __name__ == '__main__':
-        
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('--epochs', type=int, default=2)
-    parser.add_argument('--learning-rate', type=float, default=0.01)
-    parser.add_argument('--batch-size', type=int, default=128)
-    parser.add_argument('--gpu-count', type=int, default=os.environ['SM_NUM_GPUS'])
-    parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
-    parser.add_argument('--pkl', type=str, default=os.environ['SM_CHANNEL_PKL'])
+     
     
-    
-    args, _ = parser.parse_known_args()
+    args, _ = _parse_args()
     
     epochs     = args.epochs
     lr         = args.learning_rate
     batch_size = args.batch_size
     gpu_count  = args.gpu_count
     model_dir  = args.model_dir
-    pkl_dir    = args.pkl
-    
-    desc_path        = os.path.join(pkl_dir, 'condensed_descriptions.pkl')
+    pkl_dir    = args.train
+
+    desc_path        = os.path.join(pkl_dir, 'full_descriptions.pkl')
     feat_path        = os.path.join(pkl_dir, 'full_features.pkl')
     train_list_path  = os.path.join(pkl_dir, 'train_list_full.pkl')
     val_list_path    = os.path.join(pkl_dir, 'val_list_full.pkl')
@@ -202,9 +210,13 @@ if __name__ == '__main__':
     # generate inputs and outputs
     processor = sequence_generator(descriptions, features)
 
-    train_X1, train_X2, train_Y = processor.train_generator(train_list_full)
-    val_X1, val_X2, val_Y = processor.validation_generator(val_list_full)
+    train_X1, train_X2, train_Y = processor.train_generator(train_list_full[0:100])
+    val_X1, val_X2, val_Y = processor.validation_generator(val_list_full[0:20])
     
+    # get params
+    tokenizer = processor.get_tokenizer()
+    max_length = processor.get_max_length()
+    num_vocab = processor.get_num_vocab()
     
     # model architecture
     #first path
@@ -240,10 +252,8 @@ if __name__ == '__main__':
               verbose = 1
               )
     
-    plot_performance(history)
     
     
     # save Keras model for Tensorflow Serving
-    sess = K.get_session()
-    model.save(os.path.join(model_dir, 'model/1'))
-    
+    if args.current_host == args.hosts[0]:
+        model.save(os.path.join(args.sm_model_dir, '001'))
