@@ -32,10 +32,11 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=2)
     parser.add_argument('--learning-rate', type=float, default=0.01)
     parser.add_argument('--batch-size', type=int, default=128)
-    parser.add_argument('--gpu-count', type=int, default=0)
-    parser.add_argument('--model-dir', type=str, default='/tmp')
-    parser.add_argument('--pkl-dir', type=str, default='PKL')
-
+    parser.add_argument('--gpu-count', type=int, default=os.environ['SM_NUM_GPUS'])
+    parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
+    parser.add_argument('--pkl', type=str, default=os.environ['SM_CHANNEL_PKL'])
+    
+    
     args, _ = parser.parse_known_args()
     
     epochs     = args.epochs
@@ -43,7 +44,7 @@ if __name__ == '__main__':
     batch_size = args.batch_size
     gpu_count  = args.gpu_count
     model_dir  = args.model_dir
-    pkl_dir    = args.pkl_dir
+    pkl_dir    = args.pkl
     
     desc_path        = os.path.join(pkl_dir, 'condensed_descriptions.pkl')
     feat_path        = os.path.join(pkl_dir, 'full_features.pkl')
@@ -77,10 +78,6 @@ if __name__ == '__main__':
     train_X1, train_X2, train_Y = processor.train_generator(train_list_full)
     val_X1, val_X2, val_Y = processor.validation_generator(val_list_full)
     
-    # get params
-    tokenizer = processor.get_tokenizer()
-    max_length = processor.get_max_length()
-    num_vocab = processor.get_num_vocab()
     
     # model architecture
     #first path
@@ -121,8 +118,5 @@ if __name__ == '__main__':
     
     # save Keras model for Tensorflow Serving
     sess = K.get_session()
-    tf.saved_model.simple_save(
-        sess,
-        os.path.join(model_dir, 'model/1'),
-        inputs={'inputs': model.input},
-        outputs={t.name: t for t in model.outputs})
+    model.save(os.path.join(model_dir, 'model/1'))
+    

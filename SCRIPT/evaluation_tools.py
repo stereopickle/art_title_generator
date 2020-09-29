@@ -60,7 +60,7 @@ def caption_generator(img_ind, features, tokenizer, max_length, model):
     # iterate each sequence and predict the next word
     for i in range(max_length):
         current_seq = pad_sequences(current_int, maxlen = max_length)
-        next_int = np.argmax(model.predict([img_feats, current_seq]))
+        next_int = np.argmax(model.predict([img_feats, current_seq])['predictions'])
         if next_int != fin_int:
             current_int = [current_int[0] + [next_int]]
         else: break
