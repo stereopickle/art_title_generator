@@ -17,6 +17,13 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 plt.style.use('fivethirtyeight')
 
+def get_text(dictionary, img_ind):
+    ''' 
+    Helper to return a list of description 
+    given an index 
+    '''
+    return dictionary[img_ind]   
+
 def get_features(features_dict, img_ind):
     ''' 
     Helper to return feature values 
@@ -71,13 +78,12 @@ def caption_generator(img_ind, features, tokenizer, max_length, model):
     img_feats = np.expand_dims(img_feats, axis = 0)
     current_int = tokenizer.texts_to_sequences(['seqini'])
     fin_int = tokenizer.texts_to_sequences(['seqfin'])[0]
-    
+
     # iterate each sequence and predict the next word
     for i in range(max_length):
         current_seq = pad_sequences(current_int, maxlen = max_length)
         predictions = model.predict([img_feats, current_seq])
-        print(predictions)
-        next_int = np.argmax()
+        next_int = np.argmax(predictions)
         if next_int != fin_int:
             current_int = [current_int[0] + [next_int]]
         else: break
@@ -102,9 +108,10 @@ class descriptor:
         
     def test_one_image(self, img_id):
         ''' print generated caption and image given an id'''
-        print(caption_generator(img_id, self.features, self.tokenizer, self.max_length))
+        print(caption_generator(img_id, self.features, self.tokenizer, self.max_length, self.model))
         img = mpimg.imread(f'{self.img_dir}/{img_id}.jpg')
         plt.imshow(img)
+        plt.axis('off')
         plt.grid(False)
         plt.show()
     
