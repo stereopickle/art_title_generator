@@ -53,8 +53,8 @@ class sequence_generator:
     '''
     def __init__(self, dictionary, features):
         ''' INPUT: a dictionary of descriptions and features '''
-        self.dictionary = dictionary
-        self.features = features
+        self.dictionary = {str(k): v for k, v in dictionary.items()}
+        self.features = {str(k): v for k, v in features.items()}
         self.img_index = get_keys(self.dictionary)
         self.texts = get_vals(self.dictionary)
 
