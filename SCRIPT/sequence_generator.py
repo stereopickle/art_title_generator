@@ -53,8 +53,8 @@ class sequence_generator:
     '''
     def __init__(self, dictionary, features):
         ''' INPUT: a dictionary of descriptions and features '''
-        self.dictionary = dictionary
-        self.features = features
+        self.dictionary = {str(k): v for k, v in dictionary.items()}
+        self.features = {str(k): v for k, v in features.items()}
         self.img_index = get_keys(self.dictionary)
         self.texts = get_vals(self.dictionary)
 
@@ -63,8 +63,8 @@ class sequence_generator:
         INPUT: select list of image indices
         Create selector, and subsets (select_dictionary, select_img_inds, select_texts)
         '''
-        self.selector = list_
-        self.select_dictionary = {k: v for k, v in self.dictionary.items() if (k in list_) & (k in self.features)}
+        self.selector = [str(x) for x in list_]
+        self.select_dictionary = {k: v for k, v in self.dictionary.items() if (k in self.selector) & (k in self.features)}
         self.select_img_inds = get_keys(self.select_dictionary)
         self.select_texts = get_vals(self.select_dictionary)
     
@@ -81,8 +81,10 @@ class sequence_generator:
             return x, y
         
         for ind, texts in dict_.items():
-            sequences = self.tokenizer.texts_to_sequences(texts)
-            
+            if isinstance(texts, list):
+                sequences = self.tokenizer.texts_to_sequences(texts)
+            else: 
+                sequences = self.tokenizer.texts_to_sequences([texts])
             for seq in sequences:
                 x, y = breakdown_sequence(seq)
 
@@ -100,8 +102,13 @@ class sequence_generator:
         '''
         self.update_selection(train_list)
 
-        self.tokenizer = Tokenizer()
-        self.tokenizer.fit_on_texts(np.concatenate(self.select_texts))
+        self.tokenizer = Tokenizer(oov_token = "<OOV>", char_level=False)
+        ## check
+        try:
+            self.tokenizer.fit_on_texts(np.concatenate(self.select_texts))
+        except:
+            self.tokenizer.fit_on_texts(self.select_texts)
+            
         self.num_vocab = len(self.tokenizer.word_index)+1
         
         dict_ = self.select_dictionary
@@ -132,7 +139,16 @@ class sequence_generator:
         X1 = get_features(self.features, X1)
 
         return np.array(X1), np.array(X2), np.array(Y)
-    
+    def get_descriptions(self):
+        return self.dictionary
+        
+    def get_features(self):
+        return self.features
+    def get_select_list(self):
+        try: return self.selector
+        except: return None
+    def get_select_dict(self):
+        return self.select_dictionary
     def get_num_vocab(self):
         return self.num_vocab
     def get_max_length(self):
