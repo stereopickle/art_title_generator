@@ -94,7 +94,7 @@ class sequence_generator:
 
         return X1, X2, Y
 
-    def train_generator(self, train_list):
+    def train_generator(self, train_list, max_words):
         '''
         INPUT a list of training ids, 
         RETURN image inputs, text inputs, and outputs
@@ -102,14 +102,14 @@ class sequence_generator:
         '''
         self.update_selection(train_list)
 
-        self.tokenizer = Tokenizer(oov_token = "<OOV>", char_level=False)
+        self.tokenizer = Tokenizer(num_words = max_words, char_level=False)
         ## check
         try:
             self.tokenizer.fit_on_texts(np.concatenate(self.select_texts))
         except:
             self.tokenizer.fit_on_texts(self.select_texts)
             
-        self.num_vocab = len(self.tokenizer.word_index)+1
+        self.num_vocab = max_words
         
         dict_ = self.select_dictionary
         
