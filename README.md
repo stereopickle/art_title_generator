@@ -2,6 +2,10 @@
 
 The goal of this project is to develop a natural language generator (NLG) model to generate a text caption from an artwork image.  
 
+### Please note that this is an ongoing project. Below is the preliminary report and is not yet reflecting the up-to-date result of the model.
+
+
+
 ## Business Context
 1. Art Classification   
     The world of art is closely intertwined, the influence from one to another is sometimes clear yet the connection is never exclusive. Because the transition of art style is continuous, always imminent, and never simple, it's hard to classify the style of art. For this very reason, art interpretation for the research in the field of art and art history relies on the number of trained personnels and is prone to biases. This can also create discrepancy between art interpretation from the eyes of beholders (actual perceptual experience) and the research. If we are able to eliminate the bias of individual's perception and apply machine learning to art classification, we can advance art research more efficiently and more objectively.
